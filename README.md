@@ -1,4 +1,6 @@
 # immpatch
+[![Build Status][travis-img]][travis-url] [![dependencies][david-img]][david-url] [![devDependencies][david-dev-img]][david-url]
+
 > Update [immutable.js](https://github.com/facebook/immutable-js) objects using JSON Patch operations
 
 ## Install
@@ -66,3 +68,9 @@ Pull requests are actively welcomed.
 ## License
 
 `immpatch` is [MIT licensed](./LICENSE).
+
+[travis-url]: https://travis-ci.org/zaim/immpatch
+[travis-img]: http://img.shields.io/travis/zaim/immpatch.svg
+[david-url]: https://david-dm.org/zaim/immpatch
+[david-img]: https://img.shields.io/david/zaim/immpatch.svg
+[david-dev-img]: https://img.shields.io/david/dev/zaim/immpatch.svg

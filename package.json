@@ -28,7 +28,8 @@
     "test": "mocha",
     "pretest": "npm run compile",
     "testcov": "istanbul cover _mocha -- --reporter dot",
-    "pretestcov": "npm run pretest"
+    "pretestcov": "npm run pretest",
+    "testci": "mocha"
   },
   "engines": {
     "node": ">= 0.10.0",
