@@ -5,8 +5,16 @@ var pointer = require('json-pointer');
 var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test'];
 
 
+/**
+ * Shallow-clone an object.
+ */
+
 function clone (op) {
-  return Object.assign({}, op);
+  var copy = {};
+  Object.keys(op).forEach(function (k) {
+    copy[k] = op[k];
+  });
+  return copy;
 }
 
 
