@@ -1,5 +1,5 @@
 # immpatch
-[![Build Status][travis-img]][travis-url] [![dependencies][david-img]][david-url] [![devDependencies][david-dev-img]][david-url]
+[![Build Status][travis-img]][travis-url] [![coverage][coveralls-img]][coveralls-url] [![dependencies][david-img]][david-url]
 
 > Update [immutable.js](https://github.com/facebook/immutable-js) objects using JSON Patch operations
 
@@ -70,7 +70,8 @@ Pull requests are actively welcomed.
 `immpatch` is [MIT licensed](./LICENSE).
 
 [travis-url]: https://travis-ci.org/zaim/immpatch
-[travis-img]: http://img.shields.io/travis/zaim/immpatch.svg
+[travis-img]: http://img.shields.io/travis/zaim/immpatch.svg?style=flat-square
 [david-url]: https://david-dm.org/zaim/immpatch
-[david-img]: https://img.shields.io/david/zaim/immpatch.svg
-[david-dev-img]: https://img.shields.io/david/dev/zaim/immpatch.svg
+[david-img]: https://img.shields.io/david/zaim/immpatch.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/zaim/immpatch
+[coveralls-img]: https://img.shields.io/coveralls/zaim/immpatch.svg?style=flat-square

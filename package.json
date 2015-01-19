@@ -29,7 +29,7 @@
     "pretest": "npm run compile",
     "testcov": "istanbul cover _mocha -- --reporter dot",
     "pretestcov": "npm run pretest",
-    "testci": "mocha"
+    "testci": "istanbul cover _mocha --report lcovonly && cat coverage/lcov.info | coveralls"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -43,6 +43,7 @@
   "devDependencies": {
     "6to5": "^2.12.6",
     "chai": "^1.10.0",
+    "coveralls": "^2.11.2",
     "istanbul": "^0.3.5",
     "jiff": "^0.7.0",
     "jshint": "^2.5.11",
