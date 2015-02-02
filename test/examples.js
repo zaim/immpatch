@@ -103,7 +103,7 @@ describe('examples', function () {
       var ob = Immutable.fromJS({ baz: 'qux' });
       expect(function () {
         patch(ob, { op: 'test', path: '/baz', value: 'bar' });
-      }).to.throw('Test failed');
+      }).to.throw(patch.Error, 'Test failed');
     });
 
     it('adding a nested member object', function () {
@@ -122,7 +122,7 @@ describe('examples', function () {
       var ob = Immutable.fromJS({ foo: 'bar' });
       expect(function () {
         patch(ob, { op: 'add', path: '/baz/bat', value: 'qux' });
-      }).to.throw('Operation failed');
+      }).to.throw(patch.Error, 'Operation failed');
     });
 
     it('~ escape ordering', function () {
@@ -135,7 +135,7 @@ describe('examples', function () {
       var ob = Immutable.fromJS({ '/': 9, '~1': 10 });
       expect(function () {
         patch(ob, { op: 'test', path: '/~01', value: '10' });
-      }).to.throw('Test failed');
+      }).to.throw(patch.Error, 'Test failed');
     });
 
     it('adding an array value', function () {

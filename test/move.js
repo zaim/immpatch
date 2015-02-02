@@ -46,7 +46,7 @@ describe('move', function () {
     var ob = Immutable.fromJS({ a: { b: { o: {} } } });
     expect(function () {
       patch(ob, { op: 'move', from: '/a/b', path: '/a/b/o' });
-    }).to.throw('"from" location cannot be moved into it\'s child');
+    }).to.throw(patch.Error, '"from" location cannot be moved into it\'s child');
   });
 
   it('should move between arrays and objects', function () {

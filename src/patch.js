@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import debug from 'debug'
 import parse from './parse'
+import PatchError from './error'
 
 var Iterable = Immutable.Iterable
 
@@ -59,33 +60,33 @@ var operators = {
       return this.setIn(path, value)
     }
     // otherwise, it must be considered an error
-    throw new Error('Operation failed')
+    throw new PatchError('Operation failed')
   },
 
   remove (op) {
     if (!this.hasIn(op.path)) {
-      throw new Error('Path not found')
+      throw new PatchError('Path not found')
     }
     return this.removeIn(op.path)
   },
 
   replace (op) {
     if (!this.hasIn(op.path)) {
-      throw new Error('Path not found')
+      throw new PatchError('Path not found')
     }
     return this.setIn(op.path, op.value)
   },
 
   move (op) {
     if (!this.hasIn(op.from)) {
-      throw new Error('Path not found')
+      throw new PatchError('Path not found')
     }
     var from = op.from
     var path = op.path
     var value = this.getIn(from)
     var target = this.getIn(path)
     if (Iterable.isIterable(target) && target.isSubset(value)) {
-      throw new Error('"from" location cannot be moved into it\'s child')
+      throw new PatchError('"from" location cannot be moved into it\'s child')
     }
     // this operation is functionally identical to a "remove"
     // operation on the "from" location, followed immediately
@@ -97,7 +98,7 @@ var operators = {
 
   copy (op) {
     if (!this.hasIn(op.from)) {
-      throw new Error('Path not found')
+      throw new PatchError('Path not found')
     }
     var from = op.from
     var path = op.path
@@ -110,7 +111,7 @@ var operators = {
 
   test (op) {
     if (typeof op.value === 'undefined') {
-      throw new Error('Invalid operation')
+      throw new PatchError('Invalid operation')
     }
     var path = op.path
     var value = op.value
@@ -118,7 +119,7 @@ var operators = {
     // Use Immutable.is for testing, as what the specification
     // describes is essentially a recursive/deep equality check
     if (!Immutable.is(target, Immutable.fromJS(value))) {
-      throw new Error('Test failed')
+      throw new PatchError('Test failed')
     }
     return this
   }

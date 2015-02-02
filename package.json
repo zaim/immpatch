@@ -16,7 +16,7 @@
   "author": {
     "name": "Zaim Bakar"
   },
-  "main": "index",
+  "main": "./lib",
   "repository": {
     "type": "git",
     "url": "git://github.com/zaim/immpatch.git"

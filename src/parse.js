@@ -1,4 +1,5 @@
-var pointer = require('json-pointer')
+import pointer from 'json-pointer'
+import PatchError from './error'
 
 var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test']
 
@@ -36,9 +37,9 @@ export default function parse (op) {
     if (op.path) {
       op.path = pointer.parse(op.path)
     } else {
-      throw new Error('Invalid operation')
+      throw new PatchError('Invalid operation')
     }
     return op
   }
-  throw new Error('Invalid operation')
+  throw new PatchError('Invalid operation')
 }
