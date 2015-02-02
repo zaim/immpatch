@@ -1,18 +1,19 @@
-'use strict';
+import Immutable from 'immutable'
+import debug from 'debug'
+import parse from './parse'
 
-var Immutable = require('immutable');
-var Iterable = Immutable.Iterable;
-var debug = require('debug')('immpatch');
-var parse = require('./parse');
+var Iterable = Immutable.Iterable
+
+debug = debug('immpatch')
 
 
 var operators = {
 
   add (op) {
-    var container, idx;
-    var path = op.path;
-    var value = op.value;
-    var parent = path.slice(0, -1);
+    var container, idx
+    var path = op.path
+    var value = op.value
+    var parent = path.slice(0, -1)
     //
     // If the target location specifies an array index,
     // a new value is inserted into the array at the
@@ -24,23 +25,23 @@ var operators = {
     if (this.hasIn(parent)) {
       // check the parent container and see if it is
       // an indexed collection (array in immutable.js)
-      parent = path.slice(0, -1);
-      container = this.getIn(parent);
+      parent = path.slice(0, -1)
+      container = this.getIn(parent)
       if (Iterable.isIndexed(container)) {
         // only continue if the index is within the
         // array bounds, or it is '-', which
         // indicates that the value is to be appended
-        idx = path[path.length - 1];
+        idx = path[path.length - 1]
         if (idx === '-') {
           return this.updateIn(parent, (coll) => {
-            return coll.push(value);
-          });
+            return coll.push(value)
+          })
         }
         if (idx <= container.size) {
-          debug('add array element');
+          debug('add array element')
           return this.updateIn(parent, (coll) => {
-            return coll.splice(idx, 0, value);
-          });
+            return coll.splice(idx, 0, value)
+          })
         }
       }
     }
@@ -54,75 +55,75 @@ var operators = {
     //
     // (1) is root doc    or (2) container is an object
     if (path.length === 0 || Iterable.isKeyed(container)) {
-      debug('add object member');
-      return this.setIn(path, value);
+      debug('add object member')
+      return this.setIn(path, value)
     }
     // otherwise, it must be considered an error
-    throw new Error('Operation failed');
+    throw new Error('Operation failed')
   },
 
   remove (op) {
     if (!this.hasIn(op.path)) {
-      throw new Error('Path not found');
+      throw new Error('Path not found')
     }
-    return this.removeIn(op.path);
+    return this.removeIn(op.path)
   },
 
   replace (op) {
     if (!this.hasIn(op.path)) {
-      throw new Error('Path not found');
+      throw new Error('Path not found')
     }
-    return this.setIn(op.path, op.value);
+    return this.setIn(op.path, op.value)
   },
 
   move (op) {
     if (!this.hasIn(op.from)) {
-      throw new Error('Path not found');
+      throw new Error('Path not found')
     }
-    var from = op.from;
-    var path = op.path;
-    var value = this.getIn(from);
-    var target = this.getIn(path);
+    var from = op.from
+    var path = op.path
+    var value = this.getIn(from)
+    var target = this.getIn(path)
     if (Iterable.isIterable(target) && target.isSubset(value)) {
-      throw new Error('"from" location cannot be moved into it\'s child');
+      throw new Error('"from" location cannot be moved into it\'s child')
     }
     // this operation is functionally identical to a "remove"
     // operation on the "from" location, followed immediately
     // by an "add" operation at the target location with the
     // value that was just removed
-    var self = operators.remove.call(this, { path: from });
-    return operators.add.call(self, { path, value });
+    var self = operators.remove.call(this, { path: from })
+    return operators.add.call(self, { path, value })
   },
 
   copy (op) {
     if (!this.hasIn(op.from)) {
-      throw new Error('Path not found');
+      throw new Error('Path not found')
     }
-    var from = op.from;
-    var path = op.path;
+    var from = op.from
+    var path = op.path
     // This operation is functionally identical to an "add"
     // operation at the target location using the value
     // specified in the "from" member
-    var value = this.getIn(from);
-    return operators.add.call(this, { path, value });
+    var value = this.getIn(from)
+    return operators.add.call(this, { path, value })
   },
 
   test (op) {
     if (typeof op.value === 'undefined') {
-      throw new Error('Invalid operation');
+      throw new Error('Invalid operation')
     }
-    var path = op.path;
-    var value = op.value;
-    var target = this.getIn(path);
+    var path = op.path
+    var value = op.value
+    var target = this.getIn(path)
     // Use Immutable.is for testing, as what the specification
     // describes is essentially a recursive/deep equality check
     if (!Immutable.is(target, Immutable.fromJS(value))) {
-      throw new Error('Test failed');
+      throw new Error('Test failed')
     }
-    return this;
+    return this
   }
 
-};
+}
 
 
 /**
@@ -135,9 +136,9 @@ var operators = {
  */
 
 export default function patch (object, ops) {
-  ops = Array.isArray(ops) ? ops : [ops];
+  ops = Array.isArray(ops) ? ops : [ops]
   return ops.reduce((ob, op) => {
-    op = parse(op);
-    return operators[op.op].call(ob, op);
-  }, object);
+    op = parse(op)
+    return operators[op.op].call(ob, op)
+  }, object)
 }

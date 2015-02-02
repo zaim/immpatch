@@ -1,8 +1,6 @@
-'use strict';
+var pointer = require('json-pointer')
 
-var pointer = require('json-pointer');
-
-var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test'];
+var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test']
 
 
 /**
@@ -10,11 +8,11 @@ var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test'];
  */
 
 function clone (op) {
-  var copy = {};
+  var copy = {}
   Object.keys(op).forEach(function (k) {
-    copy[k] = op[k];
-  });
-  return copy;
+    copy[k] = op[k]
+  })
+  return copy
 }
 
 
@@ -31,16 +29,16 @@ function clone (op) {
 
 export default function parse (op) {
   if (OPERATORS.indexOf(op.op) !== -1) {
-    op = clone(op);
+    op = clone(op)
     if (op.from) {
-      op.from = pointer.parse(op.from);
+      op.from = pointer.parse(op.from)
     }
     if (op.path) {
-      op.path = pointer.parse(op.path);
+      op.path = pointer.parse(op.path)
     } else {
-      throw new Error('Invalid operation');
+      throw new Error('Invalid operation')
     }
-    return op;
+    return op
   }
-  throw new Error('Invalid operation');
+  throw new Error('Invalid operation')
 }
