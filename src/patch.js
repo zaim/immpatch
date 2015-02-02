@@ -11,6 +11,9 @@ debug = debug('immpatch')
 var operators = {
 
   add (op) {
+    if (typeof op.value === 'undefined') {
+      throw new PatchError('Invalid operation')
+    }
     var container, idx
     var path = op.path
     var value = op.value
@@ -38,7 +41,7 @@ var operators = {
             return coll.push(value)
           })
         }
-        if (idx <= container.size) {
+        if (idx >= 0 && idx <= container.size) {
           debug('add array element')
           return this.updateIn(parent, (coll) => {
             return coll.splice(idx, 0, value)
@@ -71,6 +74,9 @@ var operators = {
   },
 
   replace (op) {
+    if (typeof op.value === 'undefined') {
+      throw new PatchError('Invalid operation')
+    }
     if (!this.hasIn(op.path)) {
       throw new PatchError('Path not found')
     }
@@ -78,6 +84,9 @@ var operators = {
   },
 
   move (op) {
+    if (op.from == null) {
+      throw new PatchError('Invalid operation')
+    }
     if (!this.hasIn(op.from)) {
       throw new PatchError('Path not found')
     }
@@ -97,6 +106,9 @@ var operators = {
   },
 
   copy (op) {
+    if (op.from == null) {
+      throw new PatchError('Invalid operation')
+    }
     if (!this.hasIn(op.from)) {
       throw new PatchError('Path not found')
     }
@@ -138,8 +150,12 @@ var operators = {
 
 export default function patch (object, ops) {
   ops = Array.isArray(ops) ? ops : [ops]
-  return ops.reduce((ob, op) => {
-    op = parse(op)
+  object = ops.reduce((ob, op) => {
+    op = parse(op, ob)
     return operators[op.op].call(ob, op)
   }, object)
+  // Re-convert the returned object into an
+  // immutable structure, in case the entire
+  // object was replaced with a POJO
+  return Immutable.fromJS(object)
 }

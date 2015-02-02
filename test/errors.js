@@ -32,4 +32,10 @@ describe('errors', function () {
     }).to.throw(patch.Error, 'Invalid operation');
   });
 
+  it('should throw an error when path is not valid', function () {
+    expect(function () {
+      patch(Immutable.fromJS({ a: 1 }), { op: 'add', path: 'invalid.path' });
+    }).to.throw(patch.Error, 'Invalid JSON pointer');
+  });
+
 });
