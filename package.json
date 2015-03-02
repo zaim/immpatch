@@ -25,7 +25,7 @@
     "lint": "jshint --reporter node_modules/jshint-stylish/stylish src test",
     "compile": "rimraf lib && babel src --out-dir lib",
     "precompile": "npm run lint",
-    "test": "mocha --compilers js:babel/register",
+    "test": "mocha",
     "pretest": "npm run compile",
     "testcov": "istanbul cover _mocha -- --reporter dot",
     "pretestcov": "npm run pretest",
