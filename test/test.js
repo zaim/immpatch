@@ -12,7 +12,7 @@ describe('test', function () {
   it('should throw an error when value is not given', function () {
     expect(function () {
       patch(Immutable.fromJS({ a:1 }), { op: 'test', path: '/a' });
-    }).to.throw(patch.Error, 'Invalid operation');
+    }).to.throw(patch.InvalidOperationError);
   });
 
   it('should pass when scalar value is equal', function () {
@@ -37,21 +37,21 @@ describe('test', function () {
     var ob = Immutable.fromJS({ a: [1, 2, 3] });
     expect(function () {
       patch(ob, { op: 'test', path: '/a/2', value: 4 });
-    }).to.throw(patch.Error, 'Test failed');
+    }).to.throw(patch.TestFailError)
   });
 
   it('should fail when array value is inequal', function () {
     var ob = Immutable.fromJS({ a: [1, 2, ['x','y','z']] });
     expect(function () {
       patch(ob, { op: 'test', path: '/a/2', value: ['a','b','c'] });
-    }).to.throw(patch.Error, 'Test failed');
+    }).to.throw(patch.TestFailError)
   });
 
   it('should fail when object value is inequal', function () {
     var ob = Immutable.fromJS({ a: [1, 2, { b: 42 }] });
     expect(function () {
       patch(ob, { op: 'test', path: '/a/2', value: { b: 36 } });
-    }).to.throw(patch.Error, 'Test failed');
+    }).to.throw(patch.TestFailError)
   });
 
 });

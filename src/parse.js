@@ -1,5 +1,5 @@
-import {Iterable} from 'immutable'
-import PatchError from './error'
+import { Iterable } from 'immutable'
+import * as error from './error'
 
 var OPERATORS = ['add', 'remove', 'replace', 'move', 'copy', 'test']
 
@@ -32,7 +32,7 @@ function parsePointer (pointer) {
     return []
   }
   if (pointer.charAt(0) !== '/') {
-    throw new PatchError('Invalid JSON pointer: ' + pointer)
+    throw new error.PointerError('Invalid JSON pointer: ' + pointer)
   }
   return pointer.substring(1).split(/\//).map(unescape)
 }
@@ -55,7 +55,7 @@ function validatePath (path, target) {
     if (Iterable.isIterable(ref)) {
       ref = ref.getIn(path.slice(0, i))
       if (Iterable.isIndexed(ref) && !validateIndexToken(path[i])) {
-        throw new PatchError('Invalid array index: ' + path[i])
+        throw new error.PointerError('Invalid array index: ' + path[i])
       }
     }
   }
@@ -114,10 +114,16 @@ export default function parse (op, target) {
     if (op.path != null) {
       op.path = parsePointer(op.path)
     } else {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        op.op,
+        'Operation object must have a "path" member'
+      )
     }
     validatePath(op.from || op.path, target)
     return op
   }
-  throw new PatchError('Invalid operation')
+  throw new error.InvalidOperationError(
+    `Operation object "op" member must be one of ${OPERATORS.join(', ')} ` +
+    `but got "${op.op}"`
+  )
 }

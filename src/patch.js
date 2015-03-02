@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import debug from 'debug'
 import parse from './parse'
-import PatchError from './error'
+import * as error from './error'
 
 var Iterable = Immutable.Iterable
 
@@ -12,7 +12,10 @@ var operators = {
 
   add (op) {
     if (typeof op.value === 'undefined') {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        'add',
+        'Operation object must have a "value" member'
+      )
     }
     var container, idx
     var path = op.path
@@ -63,39 +66,51 @@ var operators = {
       return this.setIn(path, value)
     }
     // otherwise, it must be considered an error
-    throw new PatchError('Operation failed')
+    throw new error.InvalidOperationError(
+      'add',
+      'Target location must reference the root document or an existing object'
+    )
   },
 
   remove (op) {
     if (!this.hasIn(op.path)) {
-      throw new PatchError('Path not found')
+      throw new error.PathNotFoundError(op.path)
     }
     return this.removeIn(op.path)
   },
 
   replace (op) {
     if (typeof op.value === 'undefined') {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        'replace',
+        'Operation object must have a "value" member'
+      )
     }
     if (!this.hasIn(op.path)) {
-      throw new PatchError('Path not found')
+      throw new error.PathNotFoundError(op.path)
     }
     return this.setIn(op.path, op.value)
   },
 
   move (op) {
     if (op.from == null) {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        'move',
+        'Operation object must have a "from" member'
+      )
     }
     if (!this.hasIn(op.from)) {
-      throw new PatchError('Path not found')
+      throw new error.PathNotFoundError(op.from)
     }
     var from = op.from
     var path = op.path
     var value = this.getIn(from)
     var target = this.getIn(path)
     if (Iterable.isIterable(target) && target.isSubset(value)) {
-      throw new PatchError('"from" location cannot be moved into it\'s child')
+      throw new error.InvalidOperationError(
+        'move',
+        '"from" location cannot be moved into it\'s child'
+      )
     }
     // this operation is functionally identical to a "remove"
     // operation on the "from" location, followed immediately
@@ -107,10 +122,13 @@ var operators = {
 
   copy (op) {
     if (op.from == null) {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        'copy',
+        'Operation object must have a "from" member'
+      )
     }
     if (!this.hasIn(op.from)) {
-      throw new PatchError('Path not found')
+      throw new error.PathNotFoundError(op.from)
     }
     var from = op.from
     var path = op.path
@@ -123,7 +141,10 @@ var operators = {
 
   test (op) {
     if (typeof op.value === 'undefined') {
-      throw new PatchError('Invalid operation')
+      throw new error.InvalidOperationError(
+        'test',
+        'Operation object must have a "value" member'
+      )
     }
     var path = op.path
     var value = op.value
@@ -131,7 +152,7 @@ var operators = {
     // Use Immutable.is for testing, as what the specification
     // describes is essentially a recursive/deep equality check
     if (!Immutable.is(target, Immutable.fromJS(value))) {
-      throw new PatchError('Test failed')
+      throw new error.TestFailError(path, value, target)
     }
     return this
   }

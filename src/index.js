@@ -1,9 +1,15 @@
 import patch from './patch'
 import parse from './parse'
-import PatchError from './error'
+import * as error from './error'
 
+for (let key in error) {
+  /* istanbul ignore else */
+  if (Object.prototype.hasOwnProperty.call(error, key)) {
+    patch[key] = error[key]
+  }
+}
+
+patch.Error = patch.PatchError
 patch.parse = parse
-patch.Error = PatchError
-patch.isError = PatchError.isError
 
 export default patch

@@ -73,14 +73,14 @@ describe('add', function () {
     var ob = Immutable.fromJS({ a: [1, 2, 3] });
     expect(function () {
       patch(ob, { op: 'add', path: '/a/4', value: 2 });
-    }).to.throw(patch.Error, 'Operation failed');
+    }).to.throw(patch.InvalidOperationError);
   });
 
   it('should not create new objects', function () {
     var ob = Immutable.fromJS({ a: {} });
     expect(function () {
       patch(ob, { op: 'add', path: '/a/b/c', value: 1 });
-    }).to.throw(patch.Error, 'Operation failed');
+    }).to.throw(patch.InvalidOperationError);
   });
 
 });
