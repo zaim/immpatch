@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+* **New feature**
+  * Add custom `PatchError` subclasses, with better error messages
+* **Internal**
+  * Upgrade `babel`
+
 ## 0.1.1
 
 * **New feature**

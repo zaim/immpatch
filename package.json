@@ -1,6 +1,6 @@
 {
   "name": "immpatch",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Update immutable.js objects using JSON Patch operations",
   "keywords": [
     "json",
