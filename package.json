@@ -23,9 +23,9 @@
   },
   "scripts": {
     "lint": "jshint --reporter node_modules/jshint-stylish/stylish src test",
-    "compile": "rimraf lib && 6to5 src --out-dir lib",
+    "compile": "rimraf lib && babel src --out-dir lib",
     "precompile": "npm run lint",
-    "test": "mocha",
+    "test": "mocha --compilers js:babel/register",
     "pretest": "npm run compile",
     "testcov": "istanbul cover _mocha -- --reporter dot",
     "pretestcov": "npm run pretest",
@@ -40,7 +40,7 @@
     "immutable": "^3.6.2"
   },
   "devDependencies": {
-    "6to5": "^2.12.6",
+    "babel": "^4.6.5",
     "chai": "^1.10.0",
     "coveralls": "^2.11.2",
     "istanbul": "^0.3.5",
