@@ -44,6 +44,35 @@ Another similar module is
 simpler implementation that uses plain JS objects as patch operations, and has
 more complete tests with 100% code coverage.
 
+## API
+
+### patch
+
+```javascript
+obj = patch(obj, ops);
+```
+
+Update an Immutable.js object using JSON Patch operations. This function is
+the default export, i.e., what you get when you `require('immpatch')` or
+`import patch from 'immpatch'`.
+
+* `obj: Immutable.Iterable` - The Immutable.js object to update.
+* `ops: array|object` - Either an RFC6902 JSON Patch Document (an array),
+  or a single Patch operation object.
+
+#### Example
+
+```javascript
+// Array of patch objects:
+obj = patch(obj, [
+  { op: 'add', path: '/hello', value: ['world'] },
+  { op: 'remove', path: '/foo'}
+])
+
+// Single patch object:
+obj = patch(obj, { op: 'replace', path: '/baz', value: 'boo' })
+```
+
 ## Testing
 
 ```
