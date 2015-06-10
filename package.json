@@ -22,7 +22,7 @@
     "url": "git://github.com/zaim/immpatch.git"
   },
   "scripts": {
-    "lint": "jshint --reporter node_modules/jshint-stylish/stylish src test",
+    "lint": "jshint --reporter node_modules/jshint-stylish src test",
     "compile": "rimraf lib && babel src --out-dir lib",
     "precompile": "npm run lint",
     "test": "mocha",
