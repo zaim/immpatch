@@ -14,10 +14,10 @@ describe('errors', function () {
     var err2 = new patch.PathNotFoundError('test');
     var err3 = new patch.TestFailError('test');
     var err4 = new patch.PointerError('test');
-    expect(patch.isError(err1)).to.be.true();
-    expect(patch.isError(err2)).to.be.true();
-    expect(patch.isError(err3)).to.be.true();
-    expect(patch.isError(err4)).to.be.true();
+    expect(patch.isError(err1)).to.be.true;
+    expect(patch.isError(err2)).to.be.true;
+    expect(patch.isError(err3)).to.be.true;
+    expect(patch.isError(err4)).to.be.true;
   });
 
   it('should throw an error when op is invalid', function () {
