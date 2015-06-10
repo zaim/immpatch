@@ -1,11 +1,11 @@
 import Immutable from 'immutable'
-import debug from 'debug'
+import makeDebug from 'debug'
 import parse from './parse'
 import * as error from './error'
 
 var Iterable = Immutable.Iterable
 
-debug = debug('immpatch')
+const debug = makeDebug('immpatch')
 
 
 var operators = {
